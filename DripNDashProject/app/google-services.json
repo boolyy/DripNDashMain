@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "636429581616",
+    "firebase_url": "https://dripndashshared.firebaseio.com",
+    "project_id": "dripndashshared",
+    "storage_bucket": "dripndashshared.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:636429581616:android:bbf8fc17386e71c4999cf5",
+        "android_client_info": {
+          "package_name": "edu.rutgers.dripndashproject"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "636429581616-psjveu8bhkuiucvpv39vh6mvoh1ojor7.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB7YYihE38is2cWXRCS1Cln2mssVTzkzzk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "636429581616-psjveu8bhkuiucvpv39vh6mvoh1ojor7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "636429581616-rupb8kr4rm8sjpaa1hm1utf60unbrt0o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "edu.rutgers.software"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
