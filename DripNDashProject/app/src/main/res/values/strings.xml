@@ -19,20 +19,25 @@
     <string name="enter_room_number">Enter Room Number</string>
     <string name="enter_age">Enter Age</string>
     <string name="register_to_become_a_customer">Register to become a Customer</string>
+    <string name="customer">Customer</string>
+    <string name="dasher">dasher</string>
+    <string name="customer">Customer</string>
+    <string name="become_a_customer">Become a Customer</string>
+    <string name="become_a_dasher">Become a Dasher</string>
 
     <string-array name="plsChooseCampus">
         <item>Please choose campus above</item>
     </string-array>
 
-    <string-array name = "campuses">
+    <string-array name="campuses">
         <item>Choose your campus</item>
         <item>Busch</item>
         <item>College Ave</item>
         <item>Douglass</item>
         <item>Livingston</item>
     </string-array>
-            //ADD MORE DORMS LATER
-    <string-array name= "buschDorms">
+    //ADD MORE DORMS LATER
+    <string-array name="buschDorms">
         <item>Choose your dorm</item>
         <item>B.E.S.T. Hall</item>
         <item>Allen Hall</item>
@@ -51,13 +56,13 @@
         <item>Campbell Hall</item>
         <item>Clothier Hall</item>
     </string-array>
-    
+
     <string-array name="douglassDorms">
         <item>Choose your dorm</item>
         <item>Henderson Apartments</item>
         <item>Jameson Hall</item>
     </string-array>
-            //MAYBE ADD "OTHER" FOR GENDER??
+    //MAYBE ADD "OTHER" FOR GENDER??
     <string-array name="gender">
         <item>Choose a gender</item>
         <item>Male</item>
