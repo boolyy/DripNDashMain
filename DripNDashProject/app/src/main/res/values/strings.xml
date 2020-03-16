@@ -1,3 +1,68 @@
 <resources>
     <string name="app_name">DripNDashProject</string>
+    <string name="enter_email">Enter Email</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="drip_n_dash">DRIP \'N DASH</string>
+    <string name="don_t_have_an_account_sign_up_here">Don\'t have an account? Sign up here!</string>
+    <string name="sign_in">Sign in</string>
+    <string name="todo">TODO</string>
+    <string name="register_to_become_a_dasher">Register to become a Dasher</string>
+    <string name="enter_first_name">Enter First Name</string>
+    <string name="enter_last_name">Enter Last Name</string>
+    <string name="enter_email_address">Enter Email Address</string>
+    <string name="sign_up">Sign Up</string>
+    <string name="confirm_password">Confirm Password</string>
+    <string name="campus">Campus:</string>
+    <string name="dorm_room">Dorm Room:</string>
+    <string name="gender">Gender:</string>
+    <string name="dorm_building">Dorm Building:</string>
+    <string name="enter_room_number">Enter Room Number</string>
+    <string name="enter_age">Enter Age</string>
+    <string name="register_to_become_a_customer">Register to become a Customer</string>
+
+    <string-array name="plsChooseCampus">
+        <item>Please choose campus above</item>
+    </string-array>
+
+    <string-array name = "campuses">
+        <item>Choose your campus</item>
+        <item>Busch</item>
+        <item>College Ave</item>
+        <item>Douglass</item>
+        <item>Livingston</item>
+    </string-array>
+            //ADD MORE DORMS LATER
+    <string-array name= "buschDorms">
+        <item>Choose your dorm</item>
+        <item>B.E.S.T. Hall</item>
+        <item>Allen Hall</item>
+        <item>Buell Apartments</item>
+    </string-array>
+
+    <string-array name="liviDorms">
+        <item>Choose your dorm</item>
+        <item>Livingston Apartments</item>
+        <item>Quads</item>
+    </string-array>
+
+    <string-array name="collegeAveDorms">
+        <item>Choose your dorm</item>
+        <item>Brett Hall</item>
+        <item>Campbell Hall</item>
+        <item>Clothier Hall</item>
+    </string-array>
+    
+    <string-array name="douglassDorms">
+        <item>Choose your dorm</item>
+        <item>Henderson Apartments</item>
+        <item>Jameson Hall</item>
+    </string-array>
+            //MAYBE ADD "OTHER" FOR GENDER??
+    <string-array name="gender">
+        <item>Choose a gender</item>
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
+
+
 </resources>

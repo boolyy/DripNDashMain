@@ -29,7 +29,7 @@ import java.lang.reflect.Array;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DasherRegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+public class CustomerRegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
     Button registerButton; //initialize buttons
     EditText firstNameField, lastNameField, emailField, dormRoomField, passwordField, confirmPasswordField, ageField; //initialize edit text
     Spinner campusField, dormField, genderField; //initialize spinners
@@ -39,7 +39,7 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_dasher_register);
+        setContentView(R.layout.activity_customer_register);
         //assigning variables to their buttons, spinners, and edit text fields
         registerButton = findViewById(R.id.button);
         firstNameField = findViewById(R.id.editText3);
@@ -95,10 +95,10 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
                     emailField.setError("Email is missing");
                     emailField.requestFocus();
                 } else if(campus.equals("Choose your campus")){ //checking if user chose a campus
-                    Toast.makeText(DasherRegisterActivity.this, "Please select the campus you live on", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CustomerRegisterActivity.this, "Please select the campus you live on", Toast.LENGTH_LONG).show();
                     campusField.requestFocus();
                 } else if(dorm.equals("Choose your dorm")){ //checking if user chose a dorm
-                    Toast.makeText(DasherRegisterActivity.this, "Please select the dorm you live in", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CustomerRegisterActivity.this, "Please select the dorm you live in", Toast.LENGTH_LONG).show();
                     dormField.requestFocus();
                 } else if(dormRoom.isEmpty()){
                     dormRoomField.setError("Room number is missing!");
@@ -106,11 +106,8 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
                 } else if(age.isEmpty()){
                     ageField.setError("Age is missing");
                     ageField.requestFocus();
-                } else if(Integer.parseInt(age) < 18){ //if user is under 18, then they cannot become a Dasher
-                    ageField.setError("You are too young to become a Dasher");
-                    ageField.requestFocus();
                 } else if(gender.equals("Choose your gender")){
-                    Toast.makeText(DasherRegisterActivity.this, "Please choose a gender!", Toast.LENGTH_LONG).show();
+                    Toast.makeText(CustomerRegisterActivity.this, "Please choose a gender!", Toast.LENGTH_LONG).show();
                     genderField.requestFocus();
                 } else if(password.isEmpty()) {
                     passwordField.setError("Password is missing!");
@@ -123,14 +120,14 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
                     confirmPasswordField.requestFocus();
                 } else{ //all fields have been filled in
                     firebaseAuthorizer = FirebaseAuth.getInstance();
-                    firebaseAuthorizer.createUserWithEmailAndPassword(email, password).addOnCompleteListener(DasherRegisterActivity.this, new OnCompleteListener<AuthResult>() { //create user with email and password, and initializes listener
+                    firebaseAuthorizer.createUserWithEmailAndPassword(email, password).addOnCompleteListener(CustomerRegisterActivity.this, new OnCompleteListener<AuthResult>() { //create user with email and password, and initializes listener
                         @Override
                         public void onComplete(@NonNull Task<AuthResult> task) { //runs when creation of account is completed
                             if(!task.isSuccessful()){ //if task is unsuccessful
-                                Toast.makeText(DasherRegisterActivity.this, "Profile creation Failed", Toast.LENGTH_LONG).show();
+                                Toast.makeText(CustomerRegisterActivity.this, "Profile creation Failed", Toast.LENGTH_LONG).show();
                             } else{ //if task is successful, add all fields to firebase database
                                 FirebaseUser user = firebaseAuthorizer.getCurrentUser(); //creates user
-                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName("dasher").build(); //initializes profile changes to be made for user. Display name will be set to Dasher since user is registering as dasher
+                                UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder().setDisplayName("customer").build(); //initializes profile changes to be made for user. Display name will be set to Dasher since user is registering as dasher
                                 user.updateProfile(profileUpdates); //updates profile based on previous command
                                 String uid = firebaseAuthorizer.getCurrentUser().getUid(); //gets uid of user, this will be the name of their document
 
@@ -147,11 +144,11 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
                                 userProfile.put("REGISTER_TIMESTAMP", Timestamp.now());
                                 //add COMPLETED_JOBS ARRAY
                                 db = FirebaseFirestore.getInstance(); //initialize database
-                                db.collection("dashers").document(uid).set(userProfile) //Since this is dasher Register, the uid document is placed in dashers collection
+                                db.collection("customers").document(uid).set(userProfile) //Since this is customer Register, the uid document is placed in customers collection
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(DasherRegisterActivity.this, "All fields have been created", Toast.LENGTH_LONG).show();
+                                                Toast.makeText(CustomerRegisterActivity.this, "All fields have been created", Toast.LENGTH_LONG).show();
                                             }
                                         }) .addOnFailureListener(new OnFailureListener() {
                                     @Override
