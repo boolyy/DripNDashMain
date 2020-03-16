@@ -52,7 +52,7 @@ public class SignInActivity extends AppCompatActivity {
                     passwordField.setError("Please enter your password");
                     passwordField.requestFocus();
                 }else{ //all fields have been completed
-                    fireBaseAuthorizer =  FirebaseAuth.getInstance();
+                    fireBaseAuthorizer = FirebaseAuth.getInstance();
                     fireBaseAuthorizer.signInWithEmailAndPassword(email,password)
                             .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
                                 @Override
