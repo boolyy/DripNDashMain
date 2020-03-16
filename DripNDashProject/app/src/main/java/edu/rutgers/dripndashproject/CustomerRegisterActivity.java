@@ -26,6 +26,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -40,6 +42,7 @@ public class CustomerRegisterActivity extends AppCompatActivity implements Adapt
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_customer_register);
+
         //assigning variables to their buttons, spinners, and edit text fields
         registerButton = findViewById(R.id.button);
         firstNameField = findViewById(R.id.editText3);
@@ -142,7 +145,8 @@ public class CustomerRegisterActivity extends AppCompatActivity implements Adapt
                                 userProfile.put("NUM_JOBS_COMPLETED", 0);
                                 userProfile.put("RATING", 5);
                                 userProfile.put("REGISTER_TIMESTAMP", Timestamp.now());
-                                //add COMPLETED_JOBS ARRAY
+                                userProfile.put("COMPLETED_JOBS", new ArrayList<>(Collections.<String>emptyList()));
+
                                 db = FirebaseFirestore.getInstance(); //initialize database
                                 db.collection("customers").document(uid).set(userProfile) //Since this is customer Register, the uid document is placed in customers collection
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -169,6 +173,7 @@ public class CustomerRegisterActivity extends AppCompatActivity implements Adapt
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) { //runs when item is selected from campus spinner, dorm spinner will have values dependant on selected item of campus spinner
         //the arrays in R.array.(ARRAY NAME HERE) are defined in strings.xml under main -> res -> values
+
         if(campusField.getSelectedItem().toString().equals("Choose your campus")){ //user has not chosen a campus so there are no options for dorms to show
             ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.plsChooseCampus, android.R.layout.simple_spinner_item);
             dormField.setAdapter(adapter2);
@@ -185,6 +190,7 @@ public class CustomerRegisterActivity extends AppCompatActivity implements Adapt
             ArrayAdapter<CharSequence> adapter2 = ArrayAdapter.createFromResource(this, R.array.liviDorms, android.R.layout.simple_spinner_item);
             dormField.setAdapter(adapter2);
         }
+
     }
 
     @Override

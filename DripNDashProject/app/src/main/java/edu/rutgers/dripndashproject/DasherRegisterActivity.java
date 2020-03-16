@@ -26,10 +26,14 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.auth.User;
 
 import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
 public class DasherRegisterActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+
     Button registerButton; //initialize buttons
     EditText firstNameField, lastNameField, emailField, dormRoomField, passwordField, confirmPasswordField, ageField; //initialize edit text
     Spinner campusField, dormField, genderField; //initialize spinners
@@ -40,6 +44,7 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dasher_register);
+
         //assigning variables to their buttons, spinners, and edit text fields
         registerButton = findViewById(R.id.button);
         firstNameField = findViewById(R.id.editText3);
@@ -145,7 +150,7 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
                                 userProfile.put("NUM_JOBS_COMPLETED", 0);
                                 userProfile.put("RATING", 5);
                                 userProfile.put("REGISTER_TIMESTAMP", Timestamp.now());
-                                //add COMPLETED_JOBS ARRAY
+                                userProfile.put("COMPLETED_JOBS", new ArrayList<>(Collections.<String>emptyList()));
                                 db = FirebaseFirestore.getInstance(); //initialize database
                                 db.collection("dashers").document(uid).set(userProfile) //Since this is dasher Register, the uid document is placed in dashers collection
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
