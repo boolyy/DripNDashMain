@@ -19,8 +19,7 @@
     <string name="enter_room_number">Enter Room Number</string>
     <string name="enter_age">Enter Age</string>
     <string name="register_to_become_a_customer">Register to become a Customer</string>
-<<<<<<< HEAD
-    <string name="customer">Customer</string>
+
     <string name="dasher">dasher</string>
     <string name="customer">Customer</string>
     <string name="become_a_customer">Become a Customer</string>
@@ -32,8 +31,8 @@
     <string name="home">Home</string>
     <string name="settings">Settings</string>
     <string name="textview">TextView</string>
-    <string name="in_progres_jobs">In Progres Jobs</string>
->>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
+    <string name="in_progress_jobs">In Progress Jobs</string>
+    >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 
     <string-array name="plsChooseCampus">
         <item>Please choose campus above</item>
