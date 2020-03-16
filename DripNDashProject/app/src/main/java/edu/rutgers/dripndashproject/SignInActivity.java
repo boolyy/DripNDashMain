@@ -3,6 +3,7 @@ package edu.rutgers.dripndashproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.view.View;
@@ -36,7 +37,8 @@ public class SignInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) { //method that runs when button is clicked
                 //starts choose Dasher or Register activity
-                Toast.makeText(SignInActivity.this, "Start RegistrationActivity", Toast.LENGTH_SHORT).show(); //just to see if button works
+                //Toast.makeText(SignInActivity.this, "Start RegistrationActivity", Toast.LENGTH_SHORT).show(); //just to see if button works
+                startActivity(new Intent(SignInActivity.this, RegisterActivity.class));
             }
         });
 
