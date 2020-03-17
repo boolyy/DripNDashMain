@@ -1,5 +1,7 @@
 package edu.rutgers.dripndashproject;
 
+import java.util.ArrayList;
+
 public class Customer {
     String firstName;
     String lastName;
@@ -9,7 +11,5 @@ public class Customer {
     String gender;
     String uid;
     int age;
-    //add completedJobs array
-
-
+    ArrayList completedJobs;//string of completed jobs uids
 }
