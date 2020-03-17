@@ -61,8 +61,9 @@ public class SignInActivity extends AppCompatActivity {
                                 public void onSuccess(AuthResult authResult) { //runs if sign in is successful
                                     FirebaseUser user = fireBaseAuthorizer.getCurrentUser(); //get user
                                     if(user.getDisplayName().equals("dasher")){ //user is a dasher
-                                        Toast.makeText(SignInActivity.this, "User is a Dasher", Toast.LENGTH_LONG).show(); //just to make sure system is correctly identifying dashers
+                                        //Toast.makeText(SignInActivity.this, "User is a Dasher", Toast.LENGTH_LONG).show(); //just to make sure system is correctly identifying dashers
                                         //start dasher home page activity
+                                        startActivity(new Intent(SignInActivity.this, DasherHomeActivity.class));
                                     } else{
                                         Toast.makeText(SignInActivity.this, "User is a Customer", Toast.LENGTH_SHORT).show(); //just to make sure system is correctly identifying customers
                                         //start customer page activity
