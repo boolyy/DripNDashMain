@@ -32,6 +32,7 @@
     <string name="settings">Settings</string>
     <string name="textview">TextView</string>
     <string name="in_progress_jobs">In Progress Jobs</string>
+    <string name="past_jobs">Past Jobs</string>
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 
     <string-array name="plsChooseCampus">
