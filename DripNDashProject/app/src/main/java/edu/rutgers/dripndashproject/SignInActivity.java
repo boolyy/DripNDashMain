@@ -67,6 +67,7 @@ public class SignInActivity extends AppCompatActivity {
                                     } else{
                                         Toast.makeText(SignInActivity.this, "User is a Customer", Toast.LENGTH_SHORT).show(); //just to make sure system is correctly identifying customers
                                         //start customer page activity
+                                        //startActivity(new Intent(SignInActivity.this, CustomerHomeActivity.class));
                                     }
 
                                 }
