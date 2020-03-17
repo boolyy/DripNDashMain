@@ -13,7 +13,7 @@ public class JobRequest {
     int numLoadsEstimate;
     String dasherUID;
     String dasherName;
-    String dasherRating;
+    double dasherRating;
     Timestamp assignedTimestamp;
     int currentStage;
     int numLoadsActual;
@@ -23,8 +23,8 @@ public class JobRequest {
     String customerReview; //customer reviews dasher
     double customerRating; //customer rates dasher
 
-    public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions,       //constructor method
-                      int numLoadsEstimate, String dasherUID, String dasherName, String dasherRating, Timestamp assignedTimestamp, int currentStage, int numLoadsActual){ //check to see if amountPaid is needed
+    //constructor method
+    public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate){ //check to see if amountPaid is needed
         this.jobID = jobID;
         this.customerUID = customerUID;
         this.requestTimestamp = requestTimestamp;
@@ -33,13 +33,21 @@ public class JobRequest {
         this.dormRoom = dormRoom;
         this.customerInstructions = customerInstructions;
         this.numLoadsEstimate = numLoadsEstimate;
-        this.dasherUID = dasherUID;
-        this.dasherName = dasherName;
-        this.dasherRating = dasherRating;
-        this.assignedTimestamp = assignedTimestamp;
-        this.currentStage = currentStage;
-        this.numLoadsActual = numLoadsActual;
+
+
+        this.currentStage = 0;
+
         this.wasCancelled = false;
     }
+
+    public void onAssignment(Dasher dasher, Timestamp time){ //runs when job is assigned to Dasher
+        this.dasherUID = dasher.uid;
+        this.dasherName = dasher.firstName + " " + dasher.lastName;
+        this.dasherRating = dasher.rating;
+        this.assignedTimestamp = time;
+        this.currentStage = 1; //updates status of job to dasher on way for pick up
+    }
+
+
 
 }
