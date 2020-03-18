@@ -24,7 +24,7 @@
     <string name="customer">Customer</string>
     <string name="become_a_customer">Become a Customer</string>
     <string name="become_a_dasher">Become a Dasher</string>
-=======
+    =======
     <string name="request_job">Request Job</string>
     <string name="request_new_job">REQUEST NEW JOB</string>
     <string name="profile">Profile</string>
@@ -32,6 +32,7 @@
     <string name="settings">Settings</string>
     <string name="textview">TextView</string>
     <string name="in_progress_jobs">In Progress Jobs</string>
+    <string name="try_getting_first_name">TRY GETTING FIRST NAME</string>
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 
     <string-array name="plsChooseCampus">
