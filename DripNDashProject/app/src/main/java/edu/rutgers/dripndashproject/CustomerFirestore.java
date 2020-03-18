@@ -20,70 +20,32 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import java.util.ArrayList;
+
 public class CustomerFirestore {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final String FIRST_NAME = "firstName";
-    private static final String LAST_NAME = "lastName";
-    private static final String EMAIL = "email";
-    private static final String DORM = "dorm";
-    private static final String DORM_ROOM = "dormRoom";
-    private static final String GENDER = "gender";
-    private static final String UID = "uid";
-    private static final int AGE = 0;
+    public Customer getCustomer(final String uid) {
 
-   *//* private EditText editTextFirstName;
-    private EditText editTextLastName;
-    private EditText editTextEmail;
-    private EditText editTextDorm;
-    private EditText editTextDormRoom;
-    private EditText editTextGender;
-    private EditText editTextUID;
-    private EditText editTextAGE;
-*//*
-    FirebaseAuth firebaseAuthorizer;
-    String uid = firebaseAuthorizer.getCurrentUser().getUid();
-    public Customer getCustomer()
-    {
-        *//*String firstName = editTextFirstName.getText().toString();
-        String lastName = editTextLastName.getText().toString();
-        String email = editTextEmail.getText().toString();
-        String dorm = editTextDorm.getText().toString();
-        String dormRoom = editTextDormRoom.getText().toString();
-        String gender = editTextGender.getText().toString();
-        String uid = editTextUID.getText().toString();
-        int age = Integer.valueOf(editTextAGE.getText().toString());*//*
+        FirebaseFirestore db = FirebaseFirestore.getInstance(); //initialize database
+        final Customer customer = new Customer(); //creates new Dasher object to be returned
 
-        final DocumentReference customerRef = db.collection("customers").document(uid);
-
-        //Customer customer = new Customer(firstName,lastName,email,dorm,dormRoom,gender,uid,age);
-        Customer customer = new Customer();
-        customerRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+        db.collection("customers").document(uid).get() //gets dasher's document
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() { //start listener
                     @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            Customer customer = documentSnapshot.toObject(Customer.class);
-                            String firstName = customer.getFirstName();
-                            String lastName = customer.getLastName();
-                            String email = customer.getEmail();
-                            String dorm = customer.getDorm();
-                            String dormRoom = customer.getDormRoom();
-                            String gender = customer.getGender();
-                            int age = customer.getAge();
-
-                        } else {
-                            //Error if Document does not exist. Could be redundant if documents are assumed to be valid already.
-                            Toast.makeText(CustomerJobStatusActivity.this, "Document does not Exist", Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CustomerJobStatusActivity.this, "Error!", Toast.LENGTH_SHORT).show();
+                    public void onSuccess(DocumentSnapshot documentSnapshot) { //runs on success
+                        customer.uid = uid;
+                        customer.firstName = documentSnapshot.getString("FIRST_NAME");
+                        customer.lastName = documentSnapshot.getString("LAST_NAME");
+                        customer.email = documentSnapshot.getString("EMAIL");
+                        customer.dorm = documentSnapshot.getString("DORM");
+                        customer.dormRoom = documentSnapshot.getString("DORM_ROOM");
+                        customer.gender = documentSnapshot.getString("GENDER");
+                        Double age = documentSnapshot.getDouble("AGE");
+                        customer.age = (int) Math.round(age); //converts double to int since one can only retrieve double from firestore
+                        customer.completedJobs = (ArrayList) documentSnapshot.get("COMPLETED_JOBS"); //converts object from firestore to arraylist
                     }
                 });
+
         return customer;
     }
 
