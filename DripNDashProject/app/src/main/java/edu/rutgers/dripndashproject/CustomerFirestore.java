@@ -27,9 +27,9 @@ public class CustomerFirestore {
     public Customer getCustomer(final String uid) {
 
         FirebaseFirestore db = FirebaseFirestore.getInstance(); //initialize database
-        final Customer customer = new Customer(); //creates new Dasher object to be returned
+        final Customer customer = new Customer(); //creates new customer object to be returned
 
-        db.collection("customers").document(uid).get() //gets dasher's document
+        db.collection("customers").document(uid).get() //gets customer's document
                 .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() { //start listener
                     @Override
                     public void onSuccess(DocumentSnapshot documentSnapshot) { //runs on success
