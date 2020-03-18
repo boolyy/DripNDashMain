@@ -32,7 +32,7 @@ public class CustomerFirestore {
     private static final String UID = "uid";
     private static final int AGE = 0;
 
-   /* private EditText editTextFirstName;
+   *//* private EditText editTextFirstName;
     private EditText editTextLastName;
     private EditText editTextEmail;
     private EditText editTextDorm;
@@ -40,19 +40,19 @@ public class CustomerFirestore {
     private EditText editTextGender;
     private EditText editTextUID;
     private EditText editTextAGE;
-*/
+*//*
     FirebaseAuth firebaseAuthorizer;
     String uid = firebaseAuthorizer.getCurrentUser().getUid();
     public Customer getCustomer()
     {
-        /*String firstName = editTextFirstName.getText().toString();
+        *//*String firstName = editTextFirstName.getText().toString();
         String lastName = editTextLastName.getText().toString();
         String email = editTextEmail.getText().toString();
         String dorm = editTextDorm.getText().toString();
         String dormRoom = editTextDormRoom.getText().toString();
         String gender = editTextGender.getText().toString();
         String uid = editTextUID.getText().toString();
-        int age = Integer.valueOf(editTextAGE.getText().toString());*/
+        int age = Integer.valueOf(editTextAGE.getText().toString());*//*
 
         final DocumentReference customerRef = db.collection("customers").document(uid);
 

@@ -43,11 +43,16 @@ public class RegisterActivity extends AppCompatActivity {
         customerInfoButton.setOnClickListener(new View.OnClickListener() { //sets up listener for customer register button
             @Override
             public void onClick(View v) { //runs when customer info button is clicked
-                txt.setText("Creating a Customer account will allow you to make use of the services Drip n' Dash has to offer.");
+                txt.setText("Creating a Customer account will allow you \n to make use of the services Drip n' Dash has to offer!");
             }
         });
 
-
+        dasherInfoButton.setOnClickListener(new View.OnClickListener() { //sets up listener for customer register button
+            @Override
+            public void onClick(View v) { //runs when customer info button is clicked
+                txt.setText("By creating a Dasher account you will be \n able to get paid by doing laundry!");
+            }
+        });
 
 
 

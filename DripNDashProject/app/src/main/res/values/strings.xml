@@ -36,7 +36,7 @@
     <string name="past_jobs">Past Jobs</string>
     <string name="sign_up_to_become_a_customer_and_make_use_of_our_service">Sign up to become a Customer and make use of our service</string>
     <string name="custinfo">CustInfo</string>
-    <string name="dahserinfo">DahserInfo</string>
+    <string name="dasherinfo">DasherInfo</string>
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 
     <string-array name="plsChooseCampus">
