@@ -7,7 +7,7 @@ import android.view.View;
 import android.widget.Button;
 
 public class DasherHomeActivity extends AppCompatActivity {
-    Button settingsButton, profileButton, requestJobButton; //initialize buttons
+    Button settingsButton, profileButton, requestJobButton, pastJobsButton; //initialize buttons
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,6 +17,7 @@ public class DasherHomeActivity extends AppCompatActivity {
         settingsButton = findViewById(R.id.button7); //assign buttons their layouts
         profileButton = findViewById(R.id.button5);
         requestJobButton = findViewById(R.id.button4);
+        pastJobsButton = findViewById((R.id.button9));
 
         profileButton.setOnClickListener(new View.OnClickListener() { //initialize click listener for profile button
             @Override
@@ -38,5 +39,13 @@ public class DasherHomeActivity extends AppCompatActivity {
 
             }
         });
+
+        pastJobsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) { //
+
+            }
+        });
+
     }
 }
