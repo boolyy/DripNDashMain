@@ -2,6 +2,7 @@ package edu.rutgers.dripndashproject;
 
 import com.google.firebase.Timestamp;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Dasher {
