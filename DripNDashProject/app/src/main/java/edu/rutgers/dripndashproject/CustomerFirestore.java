@@ -20,6 +20,8 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
 
+import java.util.ArrayList;
+
 public class CustomerFirestore {
 
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -32,59 +34,36 @@ public class CustomerFirestore {
     private static final String UID = "uid";
     private static final int AGE = 0;
 
-   /* private EditText editTextFirstName;
-    private EditText editTextLastName;
-    private EditText editTextEmail;
-    private EditText editTextDorm;
-    private EditText editTextDormRoom;
-    private EditText editTextGender;
-    private EditText editTextUID;
-    private EditText editTextAGE;
-*/
+
     FirebaseAuth firebaseAuthorizer;
     String uid = firebaseAuthorizer.getCurrentUser().getUid();
-    public Customer getCustomer()
+    public Customer getCustomer(final String uid)
     {
-        /*String firstName = editTextFirstName.getText().toString();
-        String lastName = editTextLastName.getText().toString();
-        String email = editTextEmail.getText().toString();
-        String dorm = editTextDorm.getText().toString();
-        String dormRoom = editTextDormRoom.getText().toString();
-        String gender = editTextGender.getText().toString();
-        String uid = editTextUID.getText().toString();
-        int age = Integer.valueOf(editTextAGE.getText().toString());*/
+            FirebaseFirestore db = FirebaseFirestore.getInstance(); //Initializes DataBase
+            final Customer customer = new Customer();                //Creates new Customer object to be returned.
 
-        final DocumentReference customerRef = db.collection("customers").document(uid);
+            DocumentReference customerReference = db.collection("customers").document(uid);
 
-        //Customer customer = new Customer(firstName,lastName,email,dorm,dormRoom,gender,uid,age);
-        Customer customer = new Customer();
-        customerRef.get()
-                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                    @Override
-                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                        if(documentSnapshot.exists()){
-                            Customer customer = documentSnapshot.toObject(Customer.class);
-                            String firstName = customer.getFirstName();
-                            String lastName = customer.getLastName();
-                            String email = customer.getEmail();
-                            String dorm = customer.getDorm();
-                            String dormRoom = customer.getDormRoom();
-                            String gender = customer.getGender();
-                            int age = customer.getAge();
+            customerReference.get()
+                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            customer.uid = uid;
+                            customer.firstName  = documentSnapshot.getString("FIRST_NAME");
+                            customer.lastName = documentSnapshot.getString("LAST_NAME");
+                            customer.email = documentSnapshot.getString("EMAIL");
+                            customer.dorm = documentSnapshot.getString("DORM");
+                            customer.dormRoom = documentSnapshot.getString("DORM_ROOM");
+                            customer.gender = documentSnapshot.getString("GENDER");
 
-                        } else {
-                            //Error if Document does not exist. Could be redundant if documents are assumed to be valid already.
-                            Toast.makeText(CustomerJobStatusActivity.this, "Document does not Exist", Toast.LENGTH_SHORT).show();
+                            Double age = documentSnapshot.getDouble("AGE");
+                            customer.age = (int) Math.round(age);   //converts the rounded age into an integer
+                            customer.completedJobs = (ArrayList) documentSnapshot.get("COMPLETED_JOBS");
+
                         }
-                    }
-                })
-                .addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(CustomerJobStatusActivity.this, "Error!", Toast.LENGTH_SHORT).show();
-                    }
-                });
-        return customer;
+                    });
+
+            return customer;
     }
 
 
