@@ -24,19 +24,6 @@ import java.util.ArrayList;
 
 public class CustomerFirestore {
 
-    private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    private static final String FIRST_NAME = "firstName";
-    private static final String LAST_NAME = "lastName";
-    private static final String EMAIL = "email";
-    private static final String DORM = "dorm";
-    private static final String DORM_ROOM = "dormRoom";
-    private static final String GENDER = "gender";
-    private static final String UID = "uid";
-    private static final int AGE = 0;
-
-
-    FirebaseAuth firebaseAuthorizer;
-    String uid = firebaseAuthorizer.getCurrentUser().getUid();
     public Customer getCustomer(final String uid)
     {
             FirebaseFirestore db = FirebaseFirestore.getInstance(); //Initializes DataBase
@@ -59,7 +46,6 @@ public class CustomerFirestore {
                             Double age = documentSnapshot.getDouble("AGE");
                             customer.age = (int) Math.round(age);   //converts the rounded age into an integer
                             customer.completedJobs = (ArrayList) documentSnapshot.get("COMPLETED_JOBS");
-
                         }
                     });
 

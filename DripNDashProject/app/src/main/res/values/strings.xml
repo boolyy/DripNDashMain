@@ -37,6 +37,10 @@
     <string name="sign_up_to_become_a_customer_and_make_use_of_our_service">Sign up to become a Customer and make use of our service</string>
     <string name="custinfo">CustInfo</string>
     <string name="dasherinfo">DasherInfo</string>
+    <string name="home_fragment">Home Fragment</string>
+    <string name="profile_fragment">Profile Fragment</string>
+    <string name="past_jobs_fragment">Past Jobs Fragment</string>
+
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 
     <string-array name="plsChooseCampus">
