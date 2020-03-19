@@ -23,7 +23,7 @@ public class JobRequest {
     String customerReview; //customer reviews dasher
     double customerRating; //customer rates dasher
 
-    //constructor method
+    //when customer creates a job request
     public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate){ //check to see if amountPaid is needed
         this.jobID = jobID;
         this.customerUID = customerUID;

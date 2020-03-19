@@ -4,6 +4,7 @@ package edu.rutgers.dripndashproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -156,7 +157,8 @@ public class DasherRegisterActivity extends AppCompatActivity implements Adapter
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
-                                                Toast.makeText(DasherRegisterActivity.this, "All fields have been created", Toast.LENGTH_LONG).show();
+                                                startActivity(new Intent(DasherRegisterActivity.this,DasherHomeActivity.class));
+                                                //Toast.makeText(DasherRegisterActivity.this, "All fields have been created", Toast.LENGTH_LONG).show(); //just here to make sure its working
                                             }
                                         }) .addOnFailureListener(new OnFailureListener() {
                                     @Override

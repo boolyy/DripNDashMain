@@ -40,6 +40,13 @@
     <string name="home_fragment">Home Fragment</string>
     <string name="profile_fragment">Profile Fragment</string>
     <string name="past_jobs_fragment">Past Jobs Fragment</string>
+    <string name="current_jobs">Current Jobs</string>
+    <string name="request_a_job">Request a Job</string>
+    <string name="room_number">Room Number</string>
+    <string name="current_stage">Current Stage</string>
+    <string name="time_assigned">Time Assigned</string>
+    <string name="customer_name">Customer Name</string>
+    <string name="time_started">Time Started</string>
 
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 
