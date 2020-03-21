@@ -13,15 +13,10 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.sql.Time;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
 import androidx.annotation.NonNull;
-import androidx.constraintlayout.solver.widgets.Snapshot;
 
 import static android.content.ContentValues.TAG;
 
@@ -35,61 +30,58 @@ public class JobRequestFireStore extends JobRequest{
 
     // FireStore database (Class variable)
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-
-    // JobRequest Class (mainly for reference)
-    public JobRequestFireStore(String jobID, String customerUID, Timestamp requestTimestamp,
-                               String customerName, String dorm, String dormRoom,
-                               String customerInstructions, int numLoadsEstimate,
-                               String dasherUID, String dasherName,
-                               String dasherRating,
-                               Timestamp assignedTimestamp,
-                               int currentStage, int numLoadsActual) {
-        super(jobID, customerUID, requestTimestamp, customerName, dorm, dormRoom, customerInstructions, numLoadsEstimate, dasherUID, dasherName, dasherRating, assignedTimestamp, currentStage, numLoadsActual);
+    // Needs Reference
+    public JobRequestFireStore(String customerUID, Timestamp requestTimestamp, String customerName,
+                               String dorm, String dormRoom, String customerInstructions,
+                               int numLoadsEstimate) {
+        super(customerUID, requestTimestamp, customerName, dorm, dormRoom, customerInstructions,
+                numLoadsEstimate);
     }
 
+
     // Write to database (Need to figure activities)
-    private void writeJobRequest(String JobID){
+    private void writeJobRequest(JobRequest jobRequest){
 
         // Hash map to write data into the database
-        Map<String, Object> jobID = new HashMap<>();
-        jobID.put("Amount_Paid", Integer.parseInt(String.valueOf(0)));
-        jobID.put("ASSIGNED_TIMESTAMP", Timestamp.now());
-        jobID.put("CUSTOMER_INSTRUCTIONS", "");
-        jobID.put("CUSTOMER_NAME", "");
-        jobID.put("DASHER_RATING", Integer.parseInt(String.valueOf(-1)));
-        jobID.put("DASHER_UID", "");
-        jobID.put("DORM", "");
-        jobID.put("DORM_ROOM", "");
-        jobID.put("MACHINE_COST", Integer.parseInt(String.valueOf(5)));
-        jobID.put("NUM_LOADS_ACTUAL", Integer.parseInt(String.valueOf(1)));
-        jobID.put("NUM_LOADS_ESTIMATE", Integer.parseInt(String.valueOf(-1)));
-        jobID.put("REQUEST_TIMESTAMP", Timestamp.now());
-        jobID.put("WAS_CANCELLED", false);
+        final Map<String, Object> Document = new HashMap<>();
+        Document.put("Amount_Paid", jobRequest.amountPaid);
+        Document.put("ASSIGNED_TIMESTAMP", jobRequest.assignedTimestamp );
+        Document.put("CUSTOMER_INSTRUCTIONS", jobRequest.customerInstructions);
+        Document.put("CUSTOMER_NAME", jobRequest.customerName);
+        Document.put("DASHER_RATING", jobRequest.dasherRating);
+        Document.put("DASHER_UID", jobRequest.dasherUID);
+        Document.put("DORM", jobRequest.dorm);
+        Document.put("DORM_ROOM", jobRequest.dormRoom);
+        Document.put("MACHINE_COST", jobRequest.machineCost);
+        Document.put("NUM_LOADS_ACTUAL", jobRequest.numLoadsActual);
+        Document.put("NUM_LOADS_ESTIMATE", jobRequest.numLoadsEstimate);
+        Document.put("REQUEST_TIMESTAMP", jobRequest.requestTimestamp);
+        Document.put("WAS_CANCELLED", jobRequest.wasCancelled);
 
         // Write to the database
-        db.collection("jobsInProgress").document().set(jobID)
+        db.collection("jobsInProgress").document().set(jobRequest)
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
                         Toast.makeText(CustomerHomeActivity.this,
-                                "Job Requested", Toast.LENGTH_SHORT).show();
+                                "Created", Toast.LENGTH_SHORT).show();
                     }
                 }) // Checks to see if it failed
                 .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                // Show Toast
                 Toast.makeText(CustomerHomeActivity.this,
-                        "Error!", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, e.toString());
+                        "Created", Toast.LENGTH_SHORT).show();;
             }
         });
 
     }
 
     // Deletes a Job (Need to figure activities)
-    private void deleteJobRequest(String JobID){
+    private void deleteJobRequest(JobRequest jobRequest){
         // Get the file to delete
-        db.collection("jobsInProgress").document(jobID).delete()
+        db.collection("jobsInProgress").document(jobRequest.jobID).delete()
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             // If Job was deleted
@@ -108,112 +100,86 @@ public class JobRequestFireStore extends JobRequest{
 
     }
 
-    // Update a job's status (Need to tell the client that their job has been updated)
-    // (Need to figure activities)
-    private void updateJobStatus(String JobID, String Status, Boolean cancelledTF){
-
+    // Update a job's status
+    private void updateJobStatus(JobRequest jobRequest, String Status) {
         // Document Reference
-        DocumentReference job = db.collection("jobsInProgress").document(jobID);
-
-        // Checks to see if the job status was updated
+        DocumentReference job = db.collection("jobsInProgress").document(jobRequest.jobID);
+        // Update the FireBase object in the database
         job.update("STATUS", Status).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
+            // If Job was deleted
             public void onSuccess(Void aVoid) {
-                Toast.makeText(DasherHomeActivity.this,
-                        "Status Updated",Toast.LENGTH_SHORT).show();
-                Log.d(TAG, "Status Updated");
-            }
+                // Check to see if the status was update
+                Toast.makeText(CustomerHomeActivity.this,
+                        "Job Status Updated", Toast.LENGTH_SHORT).show();
+            }// If Job couldn't be deleted
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(DasherHomeActivity.this,
-                        "Error!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(CustomerHomeActivity.this,
+                        "Error Updating the Job Status!", Toast.LENGTH_SHORT).show();
                 Log.d(TAG, e.toString());
             }
         });
-
-        // If the Job is Cancelled
-        if(cancelledTF == Boolean.TRUE){
-            // Checks to see if the job was cancelled successfully
-            job.update("WAS_CANCELLED", Boolean.TRUE).addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                public void onSuccess(Void aVoid) {
-                    Toast.makeText(DasherHomeActivity.this,
-                            "Status Updated",Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, "Status Updated");
-                }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Toast.makeText(DasherHomeActivity.this,
-                            "Error!", Toast.LENGTH_SHORT).show();
-                    Log.d(TAG, e.toString());
-                }
-            });
-        }
-
+        // Update the local JobRequest Object
+        jobRequest.Status = Status;
     }
 
     // Get the oldest Job in the database (NEEDS to be Tested)
-    private String getOldestJob(){
+    private JobRequest getOldestJob(JobRequest jobRequest){
 
         // Order the database
         Task<QuerySnapshot> jobID = db.collection("jobsInProgress")
                 .orderBy("REQUEST_TIMESTAMP", Query.Direction.DESCENDING)
                 .limit(1).get();
 
-        String JobID = jobID.toString();
+            jobRequest.jobID = jobID.toString();
 
-        return JobID;
+        return jobRequest;
 
     }
 
     // getInProgressJob and convert it to a jobRequest object
-    private void getInProgressJob(String JobID){
+    // Having problems returning the JobRequest object
+    private void getInProgressJob(JobRequest jobRequest){
 
-        // Document Reference
-        DocumentReference docRef = db.collection("jobsInProgress").document(JobID);
-
-        // Get the document
+        // Document Reference to get the document from the database
+        DocumentReference docRef = db.collection("jobsInProgress").document(jobRequest.jobID);
         docRef.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                // Check to see if the document exists/can get
-                if(task.isSuccessful()){
+                if (task.isSuccessful()) {
                     DocumentSnapshot document = task.getResult();
-                    // Checks to see if the document exists in FireStore
-                    if(document.exists()){
+                    if (document.exists()) {
                         Log.d(TAG, "DocumentSnapshot data: " + document.getData());
-                        // Convert DocumentSnapshot into a JobRequest Object
-                        JobRequest jobRequest = (JobRequest) document.getData();
-
-                    // If document doesn't exist
-                    }else{
-                        Log.d(TAG, "No such document exists");
+                        JobRequest newDoc = document.toObject(JobRequest.class);
+                    } else {
+                        Log.d(TAG, "No such document");
                     }
-                // If the document can't be downloaded
-                }else{
+                } else {
                     Log.d(TAG, "get failed with ", task.getException());
                 }
             }
         });
+
+
     }
 
     // Cancel the job
-    private void cancelJob(String JobId){
+    private void cancelJob(JobRequest jobRequest){
         // Cancel the job
-        updateJobStatus(jobID,"Cancelled", Boolean.TRUE);
-        // Delete the job
-        deleteJobRequest(jobID);
+        jobRequest.wasCancelled = Boolean.TRUE;
+        // Delete the job from the FireStore database
+        deleteJobRequest(jobRequest);
     }
 
     // Move jobs in progress to completed jobs
-    private void moveToCompleted(final String JobId){
+    private void moveToCompleted(final JobRequest jobRequest){
 
         // From path
-        final DocumentReference fromDoc = db.collection("jobsInProgress").document(jobID);
+        final DocumentReference fromDoc = db.collection("jobsInProgress").document(jobRequest.jobID);
         // To Path
-        final DocumentReference toDoc = db.collection("jobsCompleted").document();
+        final DocumentReference toDoc = db.collection("jobsCompleted").document(jobRequest.jobID);
 
         fromDoc.get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
@@ -265,6 +231,5 @@ public class JobRequestFireStore extends JobRequest{
             }
         });
     }
-
 
 }
