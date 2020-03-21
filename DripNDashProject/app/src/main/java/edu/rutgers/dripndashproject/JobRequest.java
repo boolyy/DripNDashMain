@@ -1,5 +1,5 @@
 package edu.rutgers.dripndashproject;
-
+import java.util.UUID;
 import com.google.firebase.Timestamp;
 
 public class JobRequest {
@@ -24,8 +24,8 @@ public class JobRequest {
     double customerRating; //customer rates dasher
 
     //when customer creates a job request
-    public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate){ //check to see if amountPaid is needed
-        this.jobID = jobID;
+    public JobRequest (String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate){
+        this.jobID = UUID.randomUUID().toString(); //generated uid for
         this.customerUID = customerUID;
         this.requestTimestamp = requestTimestamp;
         this.customerName = customerName;
@@ -33,7 +33,6 @@ public class JobRequest {
         this.dormRoom = dormRoom;
         this.customerInstructions = customerInstructions;
         this.numLoadsEstimate = numLoadsEstimate;
-
 
         this.currentStage = 0;
 
