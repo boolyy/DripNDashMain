@@ -67,16 +67,13 @@ public class JobRequestFireStore extends JobRequest{
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Toast.makeText(CustomerHomeActivity.this,
-                                "Created", Toast.LENGTH_SHORT).show();
+
                     }
                 }) // Checks to see if it failed
                 .addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                // Show Toast
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Created", Toast.LENGTH_SHORT).show();;
+
             }
         });
 
@@ -90,15 +87,12 @@ public class JobRequestFireStore extends JobRequest{
             @Override
             // If Job was deleted
             public void onSuccess(Void aVoid) {
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Job Deleted", Toast.LENGTH_SHORT).show();
+
             }// If Job couldn't be deleted
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Error!", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, e.toString());
+
             }
         });
 
@@ -114,15 +108,12 @@ public class JobRequestFireStore extends JobRequest{
             // If Job was deleted
             public void onSuccess(Void aVoid) {
                 // Check to see if the status was update
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Job Status Updated", Toast.LENGTH_SHORT).show();
+
             }// If Job couldn't be deleted
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Error Updating the Job Status!", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, e.toString());
+
             }
         });
 
@@ -142,15 +133,14 @@ public class JobRequestFireStore extends JobRequest{
             // If Job was deleted
             public void onSuccess(Void aVoid) {
                 // Check to see if the status was update
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Job has been Accepted.", Toast.LENGTH_SHORT).show();
+
+                // Write to inProgressJobs
+                moveToInProgressJobs(jobRequest);
             }// If Job couldn't be deleted
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(CustomerHomeActivity.this,
-                        "Error! Unable to accept Job.", Toast.LENGTH_SHORT).show();
-                Log.d(TAG, e.toString());
+
             }
         });
 
