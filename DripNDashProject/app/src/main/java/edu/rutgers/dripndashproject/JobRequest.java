@@ -4,8 +4,12 @@ import com.google.firebase.Timestamp;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.UUID;
 
 public class JobRequest {
+    public JobRequest(){
+
+    }
     String jobID;
     String customerUID;
     Timestamp requestTimestamp;
@@ -31,6 +35,9 @@ public class JobRequest {
     // properties for completed jobs
     String customerReview;
     Double customerRating;
+
+
+
     // static and computed properties
 
     public static Map<Integer,String> createStatusMap(){ //creates map to be assigned to stages Hash Map
@@ -48,11 +55,32 @@ public class JobRequest {
 
         return statusMap;
     }
+
+    public static Map<Integer, Integer> createCustomerImageMap(){ //picture for status to be displayed will be decided by hashmap
+        Map<Integer, Integer> customerImageMap = new HashMap<>();
+        customerImageMap.put(0, R.drawable.ic_timer_black_24dp);
+        customerImageMap.put(1, R.drawable.ic_check_black_24dp);
+        customerImageMap.put(2, R.drawable.ic_directions_run_black_24dp);
+        customerImageMap.put(3, R.drawable.ic_shopping_cart_black_24dp);
+        customerImageMap.put(4, R.drawable.ic_sync_black_24dp);
+        customerImageMap.put(5, R.drawable.ic_sync_black_24dp);
+        customerImageMap.put(6, R.drawable.ic_format_color_reset_black_24dp);
+        customerImageMap.put(7, R.drawable.ic_format_color_reset_black_24dp);
+        customerImageMap.put(8, R.drawable.ic_directions_run_black_24dp);
+        customerImageMap.put(9, R.drawable.ic_notifications_active_black_24dp);
+
+        return customerImageMap;
+    }
+
+    Map<Integer, Integer> customerImageMap = createCustomerImageMap();
+    int currentStageImageResource = this.customerImageMap.get(currentStage); //holds the pic that the card will hold
+
     Map<Integer, String> stages = createStatusMap();
     String currentStatus = this.stages.get(currentStage); //current status assigned from hash map stages
 
-    //constructor method
+    //constructor method for JobRequest
     public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate){
+        this.currentStageImageResource = currentStageImageResource;
         this.jobID = jobID;
         this.customerUID = customerUID;
         this.requestTimestamp = requestTimestamp;
@@ -62,10 +90,12 @@ public class JobRequest {
         this.customerInstructions = customerInstructions;
         this.numLoadsEstimate = numLoadsEstimate;
 
-
         this.currentStage = 0;
-
         this.wasCancelled = false;
+    }
+
+    public int getCurrentStageImageResource(int currentStage){
+        return currentStageImageResource;
     }
 
     public void updateOnAssignment(Dasher dasher, Timestamp time){ //runs when job is assigned to Dasher
@@ -75,6 +105,7 @@ public class JobRequest {
         this.assignedTimestamp = time;
         this.currentStage = 1; //updates status of job to dasher on way for pick up
     }
+
 
 
 
