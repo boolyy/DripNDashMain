@@ -1,7 +1,7 @@
 package edu.rutgers.dripndashproject;
 
 import android.util.Log;
-
+import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,6 +30,8 @@ import static android.content.ContentValues.TAG;
 
 public class JobRequestFireStore extends JobRequest{
 
+    public JobRequestFirestoreInterface delegate;
+
 
     // FireStore database (Class variable)
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -37,22 +39,29 @@ public class JobRequestFireStore extends JobRequest{
     public JobRequestFireStore(String customerUID, Timestamp requestTimestamp, String customerName,
                                String dorm, String dormRoom, String customerInstructions,
                                int numLoadsEstimate) {
-        super(customerUID, requestTimestamp, customerName, dorm, dormRoom, customerInstructions,
-                numLoadsEstimate);
+        super();
+
+    }
+
+    public JobRequestFireStore(){
+
     }
 
 
-    // Write to job request that are pending assignment to dorm collection
-    private void writeJobRequest(JobRequest jobRequest){
+    // Write to job request that are pending assignment to user's dorm collection into jobsPendingRequests
+    public void writeJobRequest(JobRequest jobRequest){
 
         // Hash map to write data into the database
         final Map<String, Object> Document = new HashMap<>();
-        Document.put("Amount_Paid", jobRequest.amountPaid);
+        Document.put("AMOUNT_PAID", jobRequest.amountPaid);
         Document.put("ASSIGNED_TIMESTAMP", jobRequest.assignedTimestamp );
+        Document.put("CURRENT_STAGE", 0);
         Document.put("CUSTOMER_INSTRUCTIONS", jobRequest.customerInstructions);
+        Document.put("CUSTOMER_UID", jobRequest.customerUID);
         Document.put("CUSTOMER_NAME", jobRequest.customerName);
         Document.put("DASHER_RATING", jobRequest.dasherRating);
         Document.put("DASHER_UID", jobRequest.dasherUID);
+        Document.put("DASHER_NAME", jobRequest.dasherName);
         Document.put("DORM", jobRequest.dorm);
         Document.put("DORM_ROOM", jobRequest.dormRoom);
         Document.put("MACHINE_COST", jobRequest.machineCost);
@@ -62,7 +71,7 @@ public class JobRequestFireStore extends JobRequest{
         Document.put("WAS_CANCELLED", jobRequest.wasCancelled);
 
         // Write to the database
-        db.collection("dormName").document("jobPendingAssignment").set(jobRequest.jobID)
+        db.collection("dorms").document(jobRequest.dorm).collection("jobsPendingAssignment").document(jobRequest.jobID).set(Document) //had to correct this
                 .addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
@@ -78,160 +87,82 @@ public class JobRequestFireStore extends JobRequest{
 
     }
 
-    /*
-        Main Job Functions
-     */
-    // Get the oldest Job in the database   (Needs to be test)
-    private JobRequest getOldestJob(Dasher dasher){
-        // New instance of a JobRequest
-        JobRequest jobRequest = new JobRequest();
-        // Order the database  // Dorms pending assignment // Need to write if statements
-        Task<QuerySnapshot> jobID = db.collection("dorms").document(dasher.dorm)
-                .collection("jobsPendingAssignment")
-                .orderBy("REQUEST_TIMESTAMP", Query.Direction.DESCENDING)
-                .limit(1).get();
+    // Deletes a Job (Need to figure activities)
+    private void deleteJobRequest(JobRequest jobRequest){
+        // Get the file to delete
+        db.collection("jobsInProgress").document(jobRequest.jobID).delete()
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            // If Job was deleted
+            public void onSuccess(Void aVoid) {
 
-        // Convert jobID to string
-        jobRequest.jobID = jobID.toString();
+            }// If Job couldn't be deleted
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-        // Return the jobRequest instance
-        return jobRequest;
+            }
+        });
 
-    }
-
-    // Dasher gets job runs the getOldestJob which then if accepted runs onAssignmentAccept
-    JobRequest getJob(Dasher dasher, Boolean yesOrNo){
-        // Create new JobRequest instance
-        JobRequest inProgressJobRequest = new JobRequest();
-
-        // Get whether or not the Dasher accepted the job
-        int answer = wasAccepted(yesOrNo);
-
-        // If the dasher accepted run the other functions
-        if(answer == 1){
-
-            // Get the oldest job
-            inProgressJobRequest = getOldestJob(dasher);
-            // Get document reference
-            DocumentReference documentReference = db.collection("dorms")
-                    .document(dasher.dorm)
-                    .collection("jobsPendingAssignment")
-                    .document(inProgressJobRequest.jobID);
-
-            // Starting transferring data
-            JobRequest finalInProgressJobRequest = inProgressJobRequest;
-            // Get document and Transfer data
-            documentReference.get()
-                    .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            finalInProgressJobRequest.jobID = jobID;
-                            finalInProgressJobRequest.customerUID = customerUID;
-                            finalInProgressJobRequest.currentStage = currentStage;
-                            finalInProgressJobRequest.Status = Status;
-                            finalInProgressJobRequest.wasCancelled = wasCancelled;
-                            finalInProgressJobRequest.amountPaid = amountPaid;
-                            finalInProgressJobRequest.assignedTimestamp = assignedTimestamp;
-                            finalInProgressJobRequest.customerInstructions = customerInstructions;
-                            finalInProgressJobRequest.customerRating = customerRating;
-                            finalInProgressJobRequest.customerReview = customerReview;
-                            finalInProgressJobRequest.dasherName = dasherName;
-                            finalInProgressJobRequest.dasherRating = dasherRating;
-                            finalInProgressJobRequest.dasherUID = dasherUID;
-                            finalInProgressJobRequest.dorm = dorm;
-                            finalInProgressJobRequest.dormRoom = dormRoom;
-                            finalInProgressJobRequest.customerName = customerName;
-                            finalInProgressJobRequest.machineCost = machineCost;
-                            finalInProgressJobRequest.numLoadsActual = numLoadsActual;
-                            finalInProgressJobRequest.numLoadsEstimate = numLoadsEstimate;
-                            finalInProgressJobRequest.requestTimestamp = requestTimestamp;
-                        }
-                    });
-
-            // Run on Assignment Accept
-            onAssignmentAccept(finalInProgressJobRequest, dasher);
-
-            // Return inProgressJobRequest instance
-            return finalInProgressJobRequest;
-        }
-        // Return empty JobRequest
-        return inProgressJobRequest;
-    }
-
-    // Checks to see if the job was accepted (This needs to be worked on)
-    private int wasAccepted(Boolean so){
-        // Checks to see if the dasher accepted the Job
-        if(so == Boolean.TRUE){
-            // If the did
-            return 1;
-            // If they didn't
-        }else{
-            return 0;
-        }
-
-    }
-
-    // Update on AssignmentAccept (Add success listeners of nah?)
-    private void onAssignmentAccept(JobRequest jobRequest, Dasher dasher) {
-        // Document Reference (Needs change)
-        DocumentReference job = db.collection("dorms")
-                .document("dormName")
-                .collection("jobsPendingAssignment").document(jobRequest.jobID);
-        // Get the time/date
-        Date currentTime = Calendar.getInstance().getTime();
-        // Update the FireBase object in the database
-        job.update("ASSIGNED_TIMESTAMP", currentTime); // Updates the timestamp
-        job.update("DASHER_UID", dasher.uid); // Updates the job with the dasher's uid
-        // Update the Job Status to Dasher Accepted
-        updateJobStatus(jobRequest, 1);
-        // Move the document from jobs pending assignment to jobs in progress
-        moveToInProgressJobs(jobRequest);
-        // Update the local JobRequest Object
-        jobRequest.assignedTimestamp = assignedTimestamp; // Update the timestamp
-        jobRequest.dasherUID = dasherUID; // Assign dasher's uid
-        jobRequest.dasherName = dasher.firstName+ " " + dasher.lastName; // Write dasher full name
     }
 
     // Update a job's status // Error
     private void updateJobStatus(JobRequest jobRequest, int currentStage) {
+        // Document Reference
+        DocumentReference job = db.collection("jobsInProgress").document(jobRequest.jobID);
+        // Update the FireBase object in the database
+        job.update("CURRENT_STAGE", currentStage).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            // If Job was deleted
+            public void onSuccess(Void aVoid) {
+                // Check to see if the status was update
 
-        // Checks to see if the landry has been completed
-        if(currentStage == 5){
-            moveToCompleted(jobRequest);
+            }// If Job couldn't be deleted
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
 
-        // Update to current stage
-        }else{
-            // Document Reference
-            DocumentReference job = db.collection("jobsInProgress")
-                    .document(jobRequest.jobID);
-            // Update the FireBase object in the database
-            job.update("CURRENT_STAGE", currentStage)
-                    .addOnSuccessListener(new OnSuccessListener<Void>() {
-                @Override
-                // If Job was deleted
-                public void onSuccess(Void aVoid) {
-                    // Check to see if the status was update
+            }
+        });
 
-                }// If Job couldn't be deleted
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
+        // Update the local JobRequest Object
+        jobRequest.currentStage = currentStage;
+    }
 
-                }
-            });
+    // Update on AssignmentAccept
+    private void onAssignmentAccept(final JobRequest jobRequest, Dasher dasher) {
+        // Document Reference
+        DocumentReference job = db.collection("jobsInProgress").document(jobRequest.jobID);
+        // Get the time/date
+        Date currentTime = Calendar.getInstance().getTime();
+        // Update the FireBase object in the database
+        job.update("ASSIGNED_TIMESTAMP", currentTime).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            // If Job was deleted
+            public void onSuccess(Void aVoid) {
+                // Check to see if the status was update
 
-            // Update the local JobRequest Object
-            jobRequest.currentStage = currentStage;
-        }
+                // Write to inProgressJobs
+                moveToInProgressJobs(jobRequest);
+            }// If Job couldn't be deleted
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+
+            }
+        });
+
+        // Update the local JobRequest Object
+        jobRequest.assignedTimestamp = assignedTimestamp;
     }
 
     // Move document from dorm collection into inProgressJob collection
     // Move jobs in progress to completed jobs
-    private void moveToInProgressJobs(final JobRequest jobRequest){
+    public void moveToInProgressJobs(final JobRequest jobRequest){
 
         // From path
         final DocumentReference fromDoc = db.collection("dorms").
-                document("dormName").collection("jobsPendingAssignment")
+                document(jobRequest.dorm).collection("jobsPendingAssignment")
                 .document(jobRequest.jobID);
         // To Path
         final DocumentReference toDoc = db.collection("jobsInProgress")
@@ -279,7 +210,6 @@ public class JobRequestFireStore extends JobRequest{
                         // If the document doesn't exist
                         Log.d(TAG, "No such document");
                     }
-
                 }else{
                     // If the process fails
                     Log.d(TAG, "get failed with ", task.getException());
@@ -287,25 +217,75 @@ public class JobRequestFireStore extends JobRequest{
             }
         });
     }
-
-    /*
-        Other Functions
-     */
-
-    // Deletes a Job (Need to figure activities)
-    private void deleteJobRequest(JobRequest jobRequest){
-        // Get the file to delete
-        db.collection("jobsInProgress").document(jobRequest.jobID).delete()
-                .addOnSuccessListener(new OnSuccessListener<Void>() {
+    //Check if there are jobs available
+    public void pendingJobsExist(Dasher dasher){ //change this Dasher dasher
+        db.collection("dorms").document(dasher.dorm).collection("jobsPendingAssignment").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
-            // If Job was deleted
-            public void onSuccess(Void aVoid) {
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    for (DocumentSnapshot document : task.getResult()) {
+                        delegate.sendPendingJobsExist(true);
+                        return;
+                    }
+                    delegate.sendPendingJobsExist(false);
+                    return;
+                    //Log.d("TAG", count + "");
+                } else {
+                    Log.d(TAG, "Error getting documents: ", task.getException());
+                }
+            }
+        });
+    }
 
-            }// If Job couldn't be deleted
-        }).addOnFailureListener(new OnFailureListener() {
+
+    // Get the oldest Job in the database (NEEDS to be Tested)
+     public void getOldestJob(Dasher dasher){ //NEED TO ADD DASHER OBJECT PARAMETER, AND THE OLDEST JOB NEEDS TO COME FROM JOBS PENDING, not in progress job, also that job request. FIRST CHECK BEFOREHAND IF THERE ARE JOBS IN jobsPendingAssignment
+        // Orer the database
+
+        JobRequest jobRequest = new JobRequest();
+        db.collection("dorms").document(dasher.dorm).collection("jobsPendingAssignment").orderBy("REQUEST_TIMESTAMP", Query.Direction.DESCENDING).limit(1).get()
+                .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                    @Override
+                    public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                        queryDocumentSnapshots.toString();
+                    }
+                });
+        //getJob(jobID.toString());
+    }
+
+    // get JobID and convert it to a jobRequest object
+    void getPendingJob(final String jobID, final JobRequest jobRequest, Dasher dasher){
+        // Get document reference
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        final DocumentReference documentReference = db.collection("dorms").document(dasher.dorm).collection("jobsPendingAssignment").document(jobID);
+        // Starting transferring data
+        documentReference.get()
+                .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
-            public void onFailure(@NonNull Exception e) {
-
+            public void onSuccess(DocumentSnapshot documentSnapshot) {
+                jobRequest.jobID = jobID;
+                jobRequest.customerUID = documentSnapshot.getString("CUSTOMER_UID");
+                Double currentStage = documentSnapshot.getDouble("CURRENT_STAGE");
+                jobRequest.currentStage = (int) Math.round(currentStage);
+                jobRequest.wasCancelled = documentSnapshot.getBoolean("WAS_CANCELLED");
+                jobRequest.amountPaid = documentSnapshot.getDouble("AMOUNT_PAID");
+                jobRequest.assignedTimestamp = documentSnapshot.getTimestamp("ASSIGNED_TIMESTAMP");
+                jobRequest.customerInstructions = documentSnapshot.getString("CUSTOMER_INSTRUCTIONS");
+                jobRequest.customerRating = documentSnapshot.getDouble("CUSTOMER_RATING");
+                jobRequest.customerReview = documentSnapshot.getString("CUSTOMER_REVIEW");
+                jobRequest.dasherName = documentSnapshot.getString("DASHER_NAME");
+                jobRequest.dasherRating = documentSnapshot.getDouble("DASHER_RATING");
+                jobRequest.dasherUID = documentSnapshot.getString("DASHER_UID");
+                jobRequest.dorm = documentSnapshot.getString("DORM");
+                jobRequest.dormRoom = documentSnapshot.getString("DORM_ROOM");
+                jobRequest.customerName = documentSnapshot.getString("CUSTOMER_NAME");
+                jobRequest.machineCost = documentSnapshot.getDouble("MACHINE_COST");
+                double numLoadsActual = documentSnapshot.getDouble("NUM_LOADS_ACTUAL");
+                jobRequest.numLoadsActual = (int) numLoadsActual;
+                double numLoadsEstimate = documentSnapshot.getDouble("NUM_LOADS_ESTIMATE");
+                jobRequest.numLoadsEstimate = (int) numLoadsEstimate;
+                jobRequest.requestTimestamp = documentSnapshot.getTimestamp("REQUEST_TIMESTAMP");
+                delegate.sendJobRequest(jobRequest);
             }
         });
 
@@ -377,5 +357,5 @@ public class JobRequestFireStore extends JobRequest{
             }
         });
     }
-    
+
 }

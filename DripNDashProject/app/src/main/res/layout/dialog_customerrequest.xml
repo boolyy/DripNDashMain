@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent" android:layout_height="match_parent"
+    android:padding = "16dp">
+
+    <EditText
+        android:id = "@+id/specialDetailsField"
+        android:hint= "@string/enter_special_instructions_here"
+        android:layout_width= "match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below = "@id/numLoadsEstimatedEditText"
+        android:importantForAutofill="no"
+        android:inputType="text"
+        android:layout_alignParentLeft="true" />
+
+    <EditText
+        android:id="@+id/numLoadsEstimatedEditText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:ems="15"
+        android:hint = "@string/how_many_loads_of_laundry_will_it_be"
+        android:inputType="number"
+        android:importantForAutofill="no" />
+
+</RelativeLayout>

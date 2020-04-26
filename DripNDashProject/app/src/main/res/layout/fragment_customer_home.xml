@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/fragment_home">
+    android:id="@+id/fragment_customerHome">
 
     <TextView
         android:id="@+id/textView5"
@@ -15,10 +15,10 @@
         android:textSize="30sp" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id = "@+id/recyclerViewDasher"
+        android:id = "@+id/recyclerViewCustomer"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_above="@id/buttonRequest"
+        android:layout_above="@id/buttonCustomerRequest"
         android:layout_below="@id/textView5"
         android:padding = "4dp"
         android:scrollbars="vertical"
@@ -26,10 +26,10 @@
         android:layout_marginBottom="0dp"/>
 
     <Button
-        android:id="@+id/buttonRequest"
+        android:id="@+id/buttonCustomerRequest"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text= "@string/request_a_job"
+        android:text= "@string/request_a_dasher"
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"/>
 

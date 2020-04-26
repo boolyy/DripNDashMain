@@ -40,7 +40,7 @@ public class JobRequest {
 
     // static and computed properties
 
-    public static Map<Integer,String> createStatusMap(){ //creates map to be assigned to stages Hash Map
+    public static Map<Integer,String> createCustomerStatusMap(){ //creates map to be assigned to stages Hash Map
         Map<Integer,String> statusMap = new HashMap<>();
         statusMap.put(0, "Waiting for Dasher to accept");
         statusMap.put(1, "Dasher accepted request");
@@ -51,6 +51,22 @@ public class JobRequest {
         statusMap.put(6, "Laundry in dryer");
         statusMap.put(7, "Finished drying");
         statusMap.put(8, "Dasher on way for drop off");
+        statusMap.put(9, "Dropped off laundry");
+
+        return statusMap;
+    }
+
+    public static Map<Integer,String> createDasherStatusMap(){ //creates map to be assigned to stages Hash Map
+        Map<Integer,String> statusMap = new HashMap<>();
+        statusMap.put(0, "Waiting for Dasher to accept");
+        statusMap.put(1, "Accepted Request");
+        statusMap.put(2, "On way for Pick-Up");
+        statusMap.put(3, "Picked up laundry");
+        statusMap.put(4, "Laundry in washer");
+        statusMap.put(5, "Finished washing");
+        statusMap.put(6, "Laundry in dryer");
+        statusMap.put(7, "Finished drying");
+        statusMap.put(8, "On way for drop off");
         statusMap.put(9, "Dropped off laundry");
 
         return statusMap;
@@ -75,11 +91,13 @@ public class JobRequest {
     Map<Integer, Integer> customerImageMap = createCustomerImageMap();
     int currentStageImageResource = this.customerImageMap.get(currentStage); //holds the pic that the card will hold
 
-    Map<Integer, String> stages = createStatusMap();
-    String currentStatus = this.stages.get(currentStage); //current status assigned from hash map stages
+    Map<Integer, String> customerStages = createCustomerStatusMap();
+    Map<Integer, String> dasherStages = createDasherStatusMap();
+    String dasherCurrentStatus = this.dasherStages.get(currentStage); //current status assigned from hash map stages
+    String customerCurrentStatus = this.customerStages.get(currentStage);
 
     //constructor method for JobRequest
-    public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate){
+    public JobRequest(String jobID, String customerUID, Timestamp requestTimestamp, String customerName, String dorm, String dormRoom, String customerInstructions, int numLoadsEstimate, double dasherRating){
         this.currentStageImageResource = currentStageImageResource;
         this.jobID = jobID;
         this.customerUID = customerUID;
@@ -89,13 +107,9 @@ public class JobRequest {
         this.dormRoom = dormRoom;
         this.customerInstructions = customerInstructions;
         this.numLoadsEstimate = numLoadsEstimate;
-
+        this.dasherRating = dasherRating;
         this.currentStage = 0;
         this.wasCancelled = false;
-    }
-
-    public int getCurrentStageImageResource(int currentStage){
-        return currentStageImageResource;
     }
 
     public void updateOnAssignment(Dasher dasher, Timestamp time){ //runs when job is assigned to Dasher

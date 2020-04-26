@@ -19,37 +19,38 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.auth.User;
+import com.google.protobuf.DescriptorProtos;
 
 import java.util.ArrayList;
 
 public class CustomerFirestore {
 
-    public Customer getCustomer(final String uid)
-    {
+   public CustomerFirestoreInterface delegate;
+
+    public void getCustomer(final String uid) { //new Customer()
+            //final CustomerFirestoreInterface delegate;
             FirebaseFirestore db = FirebaseFirestore.getInstance(); //Initializes DataBase
-            final Customer customer = new Customer();                //Creates new Customer object to be returned.
-
+            //final Customer customer = new Customer(); //Creates new Customer object to be returned.
             DocumentReference customerReference = db.collection("customers").document(uid);
-
+            final Customer customer = new Customer();
             customerReference.get()
                     .addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
                             customer.uid = uid;
+                            customer.rating = documentSnapshot.getDouble("RATING");
                             customer.firstName  = documentSnapshot.getString("FIRST_NAME");
                             customer.lastName = documentSnapshot.getString("LAST_NAME");
                             customer.email = documentSnapshot.getString("EMAIL");
                             customer.dorm = documentSnapshot.getString("DORM");
                             customer.dormRoom = documentSnapshot.getString("DORM_ROOM");
                             customer.gender = documentSnapshot.getString("GENDER");
-
                             Double age = documentSnapshot.getDouble("AGE");
                             customer.age = (int) Math.round(age);   //converts the rounded age into an integer
                             customer.completedJobs = (ArrayList) documentSnapshot.get("COMPLETED_JOBS");
+                            delegate.sendCustomer(customer);
                         }
                     });
-
-            return customer;
     }
 
 

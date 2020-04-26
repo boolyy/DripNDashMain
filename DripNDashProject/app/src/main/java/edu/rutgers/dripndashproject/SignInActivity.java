@@ -64,11 +64,10 @@ public class SignInActivity extends AppCompatActivity {
                                         //Toast.makeText(SignInActivity.this, "User is a Dasher", Toast.LENGTH_LONG).show(); //just to make sure system is correctly identifying dashers
                                         startActivity(new Intent(SignInActivity.this, DasherHomeActivity.class)); //start dasher home page activity
                                     } else{
-                                        Toast.makeText(SignInActivity.this, "User is a Customer", Toast.LENGTH_SHORT).show(); //just to make sure system is correctly identifying customers
+                                        //Toast.makeText(SignInActivity.this, "User is a Customer", Toast.LENGTH_SHORT).show(); //just to make sure system is correctly identifying customers
                                         //start customer page activity;
-                                        //startActivity(new Intent(SignInActivity.this, CustomerHomeActivity.class));
+                                        startActivity(new Intent(SignInActivity.this, CustomerHomeActivity.class));
                                     }
-
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {

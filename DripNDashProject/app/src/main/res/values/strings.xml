@@ -5,7 +5,6 @@
     <string name="drip_n_dash">DRIP \'N DASH</string>
     <string name="don_t_have_an_account_sign_up_here">Don\'t have an account? Sign up here!</string>
     <string name="sign_in">Sign in</string>
-    <string name="todo">TODO</string>
     <string name="register_to_become_a_dasher">Register to become a Dasher</string>
     <string name="enter_first_name">Enter First Name</string>
     <string name="enter_last_name">Enter Last Name</string>
@@ -47,6 +46,23 @@
     <string name="time_assigned">Time Assigned</string>
     <string name="customer_name">Customer Name</string>
     <string name="time_started">Time Started</string>
+    <string name="todo">TODO</string>
+    <string name="line_1">Line 1</string>
+    <string name="line_2">Line 2</string>
+    <string name="request_a_dasher">Request a Dasher</string>
+    <string name="add_job_details_here">Add Job Details Here</string>
+    <string name="set_job_details">Set Job Details</string>
+    <string name="enter_special_instructions_here">Enter special instructions here</string>
+    <string name="how_many_loads_of_laundry_will_it_be">How many loads of laundry will it be?</string>
+    <string name="submit">Submit</string>
+    <string name="status">Status</string>
+    <string name="dashername">DasherName</string>
+    <string name="dasherName" />
+    <string name="nameofdasher">nameOfDasher</string>
+    <string name="customername">customerName</string>
+    <string name="check_if_there_are_pending_jobs_in_llvingston_apartments">Check if there are pending Jobs in LLvingston Apartments</string>
+    <string name="check_if_there_are_pending_jobs_in_livingston">Check if there are pending jobs in Livingston</string>
+
 
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
 

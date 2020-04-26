@@ -4,6 +4,7 @@ package edu.rutgers.dripndashproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -153,11 +154,12 @@ public class CustomerRegisterActivity extends AppCompatActivity implements Adapt
                                             @Override
                                             public void onSuccess(Void aVoid) {
                                                 Toast.makeText(CustomerRegisterActivity.this, "All fields have been created", Toast.LENGTH_LONG).show();
+                                                startActivity(new Intent(CustomerRegisterActivity.this, CustomerHomeActivity.class));
                                             }
                                         }) .addOnFailureListener(new OnFailureListener() {
                                     @Override
                                     public void onFailure(@NonNull Exception e) {
-
+                                        Toast.makeText(CustomerRegisterActivity.this, "Something went wrong", Toast.LENGTH_LONG).show();
                                     }
                                 });
 
