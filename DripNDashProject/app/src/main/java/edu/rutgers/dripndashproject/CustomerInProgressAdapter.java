@@ -45,6 +45,8 @@ public class CustomerInProgressAdapter extends RecyclerView.Adapter<CustomerInPr
     @Override
     public void onBindViewHolder(@NonNull CustomerInProgressViewHolder holder, int position) {
         JobRequest currentItem = customerInProgressItems.get(position);
+        currentItem.currentStageImageResource = currentItem.customerImageMap.get(currentItem.currentStage);
+        currentItem.customerCurrentStatus = currentItem.customerStages.get(currentItem.currentStage);
         holder.customerCurrentStageInProgressView.setImageResource(currentItem.currentStageImageResource);
         holder.customerStatusText.setText(currentItem.customerCurrentStatus);
         holder.assignedTime.setText(currentItem.requestTimestamp.toDate().toString());

@@ -38,7 +38,7 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
     Customer customer; //initialize customer object
 
     ArrayList<JobRequest> inProgressItemsCustomers; //makes job request array list
-    ArrayList<ListenerRegistration> inProgressJobListener;
+    ArrayList<ListenerRegistration> inProgressJobListeners;
     //recyclerView stuff
     private RecyclerView customerInProgressRecyclerView;
     private RecyclerView.Adapter customerInProgressAdapter;
@@ -126,15 +126,17 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
             jobRequestFireStore.writeJobRequest(jobRequest); //writes job request to firebase
             inProgressItemsCustomers.add(jobRequest); //adds it to Array list for recycler view
             customerInProgressAdapter.notifyItemInserted(inProgressItemsCustomers.size()); //lets adapter know that item has been inserted at a certain index
-            CollectionReference inProgressJobs = db.collection("jobsInProgress");
 
+            final CollectionReference inProgressJobs = db.collection("jobsInProgress");
             //make listener array list
-            ListenerRegistration listener = inProgressJobs.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            inProgressJobs.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot queryDocumentSnapshots, @Nullable FirebaseFirestoreException e) {
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                         if (documentSnapshot.getId().equals(jobRequest.jobID)){
-                            jobRequest.currentStage++;
+                            inProgressItemsCustomers.get(inProgressItemsCustomers.indexOf(jobRequest)).currentStage++;
+                            customerInProgressAdapter.notifyItemChanged(inProgressItemsCustomers.indexOf(jobRequest));
+                            return;
                         }
                     }
                 }
