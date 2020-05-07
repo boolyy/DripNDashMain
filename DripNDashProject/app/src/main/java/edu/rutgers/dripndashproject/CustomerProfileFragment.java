@@ -26,7 +26,72 @@ public class CustomerProfileFragment extends Fragment {
     FirebaseFirestore db; //initialize fire store to add in user's information to database
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        // Get the resources
+        firstNameField = getView().findViewById(R.id.editText3);
+        emailField = getView().findViewById(R.id.editText5);
+        dormRoomField = getView().findViewById(R.id.editText8);
+        dormField = getView().findViewById(R.id.spinner2);
+        editButton = getView().findViewById(R.id.button6);
+        saveButton = getView().findViewById(R.id.button9);
+        ratingBar = getView().findViewById(R.id.ratingBar);
 
+        // Firebase
+        db = FirebaseFirestore.getInstance();
+
+        class EditProfile extends Customer{
+
+            void edit(final Customer customer){
+
+                // Static Name
+                String firstName = customer.firstName.toString();
+                String lastName = customer.lastName.toString();
+                String fullName = firstName + ' ' + lastName;
+                firstNameField.setText(fullName);
+                // Static Dorm Number
+                Integer currentDorm = Integer.parseInt(customer.dormRoom);
+                dormRoomField.setText(currentDorm);
+                // Static Rating (Having trouble getting rating)
+                Double rating = customer.rating;
+                ratingBar.setRating(rating.intValue());
+                // Static Email
+                String currentEmail = customer.email;
+                emailField.setText(currentEmail);
+
+                // Edit button listener
+                editButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        // Allow user to change values
+                        final String email = emailField.getText().toString();
+                        final String dormNumber = dormRoomField.getText().toString();
+                        final String dorm = dormField.getSelectedItem().toString();
+
+                        saveButton.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                // Update the dasher instance
+                                customer.email = email;
+                                customer.dormRoom = dormNumber;
+                                customer.dorm = dorm;
+                                // Update the database
+                                // Update email
+                                db.collection("customer").document(customer.uid)
+                                        .update("EMAIL", customer.email);
+                                // Update dorm
+                                db.collection("customer").document(customer.uid)
+                                        .update("DORM_ROOM", customer.dormRoom);
+                                // Update dorm
+                                db.collection("customer").document(customer.uid)
+                                        .update("DORM", customer.dorm);
+                            }
+
+                        });
+
+                    };
+                });
+            }
+
+        }
         return (ViewGroup) inflater.inflate(R.layout.fragment_profile, container, false);
     }
 }
