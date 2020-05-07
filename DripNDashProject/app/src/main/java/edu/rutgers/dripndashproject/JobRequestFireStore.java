@@ -1,7 +1,6 @@
 package edu.rutgers.dripndashproject;
 
 import android.util.Log;
-import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -23,11 +22,6 @@ import androidx.annotation.NonNull;
 import static android.content.ContentValues.TAG;
 
 
-// Most of the functions needs to have the activity changed
-// Needed to assign an activity so that the code doesn't throw errors
-// In the activities that that are going to call the functions you need to assign them properly
-// This whole file needs to be tested
-
 public class JobRequestFireStore extends JobRequest{
 
     public JobRequestFirestoreInterface delegate;
@@ -35,15 +29,8 @@ public class JobRequestFireStore extends JobRequest{
 
     // FireStore database (Class variable)
     private FirebaseFirestore db = FirebaseFirestore.getInstance();
-    // Needs Reference
-    public JobRequestFireStore(String customerUID, Timestamp requestTimestamp, String customerName,
-                               String dorm, String dormRoom, String customerInstructions,
-                               int numLoadsEstimate) {
-        super();
 
-    }
-
-    public JobRequestFireStore(){
+    public JobRequestFireStore(){ //constructor variable
 
     }
 

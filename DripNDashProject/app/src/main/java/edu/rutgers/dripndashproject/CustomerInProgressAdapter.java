@@ -11,7 +11,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
 
-import io.grpc.StatusException;
 
 
 public class CustomerInProgressAdapter extends RecyclerView.Adapter<CustomerInProgressAdapter.CustomerInProgressViewHolder> {

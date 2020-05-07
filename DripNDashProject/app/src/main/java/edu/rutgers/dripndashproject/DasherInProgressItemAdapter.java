@@ -3,7 +3,6 @@ package edu.rutgers.dripndashproject;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -15,7 +14,7 @@ import java.util.ArrayList;
 
 
 public class DasherInProgressItemAdapter extends RecyclerView.Adapter<DasherInProgressItemAdapter.DasherInProgressItemsViewHolder> {
-    private ArrayList<JobRequest> dasherInProgressItemArrayList;
+    private ArrayList<JobRequest> dasherInProgressItemArrayList; //initialize array list of job requests
     private OnItemClickListener DasherInProgressListener; //listener that checks for when item has been clicked
 
     public interface OnItemClickListener {
@@ -32,7 +31,11 @@ public class DasherInProgressItemAdapter extends RecyclerView.Adapter<DasherInPr
 
         public DasherInProgressItemsViewHolder(@NonNull View itemView, final OnItemClickListener listener) {
             super(itemView);
+
+            //assign image view
             imageViewDasher = itemView.findViewById(R.id.imageViewDasher);
+
+            //assign text views
             dasherStatusText = itemView.findViewById(R.id.statusTextDasher);
             customerAssigned = itemView.findViewById(R.id.customerNameText);
             assignedTime = itemView.findViewById(R.id.timeAssignedDasher);

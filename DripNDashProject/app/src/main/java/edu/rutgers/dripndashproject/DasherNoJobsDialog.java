@@ -14,7 +14,7 @@ public class DasherNoJobsDialog extends AppCompatDialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(@Nullable Bundle savedInstanceState) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+        AlertDialog.Builder builder = new AlertDialog.Builder(getActivity()); //builds dialog box for when there are no jobs available for a Dasher
         builder.setTitle("No Jobs Found")
                 .setMessage("Please try again later")
                 .setPositiveButton("OK", new DialogInterface.OnClickListener() {

@@ -1,7 +1,5 @@
 package edu.rutgers.dripndashproject;
 
-import android.app.AlertDialog;
-import android.content.DialogInterface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,30 +13,25 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static java.util.UUID.randomUUID;
 
 public class CustomerHomeFragment extends Fragment implements CustomerRequestDialog.CustomerRequestDialogListener, CustomerFirestoreInterface{
     Customer customer; //initialize customer object
 
     ArrayList<JobRequest> inProgressItemsCustomers; //makes job request array list
-    ArrayList<ListenerRegistration> inProgressJobListeners;
+
     //recyclerView stuff
     private RecyclerView customerInProgressRecyclerView;
     private RecyclerView.Adapter customerInProgressAdapter;
@@ -86,23 +79,6 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
         customerRequestDialog.show(getFragmentManager(), "customer dialog");
     }
 
-    public void openDasherJobAcceptDialog(){ //opens dialog for system find job
-        DasherJobAcceptDialog dasherJobAcceptDialog = new DasherJobAcceptDialog();
-        assert getFragmentManager() != null;
-        dasherJobAcceptDialog.show(getFragmentManager(), "customer dialog");
-    }
-
-    public void openNoJobsDialog(){ //opens dialog for when system does not find job 
-        DasherNoJobsDialog dasherNoJobsDialog = new DasherNoJobsDialog();
-        dasherNoJobsDialog.show(getChildFragmentManager(), "example dialog");
-    }
-
-    //public void createDasherInProgressItemsList(){ //DO NOT THINK I NEED THIS
-      //  inProgressItems = new ArrayList<>();
-        //inProgressItems.add(new DasherInProgressItem(R.drawable.ic_timer_black_24dp, "Line 1", "Line 2"));
-        //inProgressItems.add(new DasherInProgressItem(R.drawable.ic_directions_run_black_24dp, "Line 3", "Line 4"));
-   //}
-
     public void buildCustomerInProgressRecyclerView(View v){
         customerInProgressRecyclerView = v.findViewById(R.id.recyclerViewCustomer);
         customerInProgressRecyclerView.setHasFixedSize(true);
@@ -135,6 +111,7 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
                     for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
                         if (documentSnapshot.getId().equals(jobRequest.jobID)){
                             inProgressItemsCustomers.get(inProgressItemsCustomers.indexOf(jobRequest)).currentStage++;
+                            inProgressItemsCustomers.get(inProgressItemsCustomers.indexOf(jobRequest)).dasherName = documentSnapshot.getString("DASHER_NAME");
                             customerInProgressAdapter.notifyItemChanged(inProgressItemsCustomers.indexOf(jobRequest));
                             return;
                         }
@@ -150,7 +127,7 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
     @Override
     public void sendCustomer(Customer customer) {
         this.customer = customer;
-        Toast.makeText(getActivity(), customer.lastName, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(), customer.lastName, Toast.LENGTH_SHORT).show(); // just a test to make sure that getCustomer is working correctly
     }
 
 

@@ -1,38 +1,17 @@
 package edu.rutgers.dripndashproject;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
-
 import android.os.Bundle;
-import android.os.PersistableBundle;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import androidx.fragment.app.FragmentManager;
-import androidx.viewpager.widget.ViewPager;
-import androidx.viewpager2.adapter.FragmentStateAdapter;
-import androidx.viewpager2.widget.ViewPager2;
-
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.google.firebase.Timestamp;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.UUID;
+
+
+
 
 public class CustomerHomeActivity extends AppCompatActivity {
+    //initialize fragments
     private CustomerHomeFragment customerHomeFragment;
     private CustomerProfileFragment customerProfileFragment;
     private CustomerPastJobsFragment customerPastJobsFragment;
@@ -41,7 +20,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_dasher_home);
-        if(savedInstanceState == null){ //initialize fragments
+        if(savedInstanceState == null){ //initialize fragment objects
             customerHomeFragment = new CustomerHomeFragment();
             customerProfileFragment = new CustomerProfileFragment();
             customerPastJobsFragment = new CustomerPastJobsFragment();
@@ -67,15 +46,13 @@ public class CustomerHomeActivity extends AppCompatActivity {
                                     .hide(customerProfileFragment) //hides profile fragment
                                     .commit();
                             break;
-                        case R.id.nav_pastJobs:
-                            //selectedFragment = dasherPastJobsFragment;
+                        case R.id.nav_pastJobs: //if past jobs button is selected
                             getSupportFragmentManager().beginTransaction().show(customerPastJobsFragment)
                                     .hide(customerHomeFragment)
                                     .hide(customerProfileFragment)
                                     .commit();
                             break;
-                        case R.id.nav_profile:
-                            //selectedFragment = dasherProfileFragment;
+                        case R.id.nav_profile: //if profiles button is selected
                             getSupportFragmentManager().beginTransaction().show(customerProfileFragment)
                                     .hide(customerHomeFragment)
                                     .hide(customerPastJobsFragment)

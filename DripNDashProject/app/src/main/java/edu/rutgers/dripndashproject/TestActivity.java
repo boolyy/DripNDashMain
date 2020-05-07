@@ -7,6 +7,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+
+//class used for testing out some methods
 public class TestActivity extends AppCompatActivity implements JobRequestFirestoreInterface{
 
     //initialize buttons here

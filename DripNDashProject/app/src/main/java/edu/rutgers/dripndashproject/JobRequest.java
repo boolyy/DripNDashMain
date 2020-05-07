@@ -1,15 +1,16 @@
 package edu.rutgers.dripndashproject;
 
 import com.google.firebase.Timestamp;
-
 import java.util.HashMap;
 import java.util.Map;
-import java.util.UUID;
+
 
 public class JobRequest {
-    public JobRequest(){
+
+    public JobRequest(){ //constructor variable
 
     }
+
     String jobID;
     String customerUID;
     Timestamp requestTimestamp;

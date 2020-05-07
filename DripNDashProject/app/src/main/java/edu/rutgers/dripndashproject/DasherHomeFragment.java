@@ -1,26 +1,18 @@
 package edu.rutgers.dripndashproject;
 
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.TableRow;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import androidx.viewpager.widget.ViewPager;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
@@ -28,16 +20,10 @@ import com.google.firebase.Timestamp;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.DocumentReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
-
-import java.sql.Time;
-import java.text.CollationElementIterator;
 import java.util.ArrayList;
 
 public class DasherHomeFragment extends Fragment implements DasherFirestoreInterface, JobRequestFirestoreInterface{
@@ -51,7 +37,8 @@ public class DasherHomeFragment extends Fragment implements DasherFirestoreInter
     //initialize button
     Button requestJobButton;
     FirebaseFirestore db;
-    //initialize text fields
+
+    //create objects
     final JobRequestFireStore jobRequestFireStore = new JobRequestFireStore();
     JobRequest jobRequest = new JobRequest();
     @Nullable
@@ -63,12 +50,6 @@ public class DasherHomeFragment extends Fragment implements DasherFirestoreInter
 
         inProgressItemsDashers = new ArrayList<>();
 
-
-            //JobRequestFireStore jobRequestFireStore = new JobRequestFireStore();
-            //jobRequestFireStore.delegate = this;  CHECK THIS
-            //jobRequestFireStore.getJob(dasher);
-
-        //createDasherInProgressItemsList();
         buildDasherInProgressRecyclerView(v);
 
         DasherFirestore dasherFirestore = new DasherFirestore();
@@ -99,12 +80,6 @@ public class DasherHomeFragment extends Fragment implements DasherFirestoreInter
         dasherNoJobsDialog.show(getChildFragmentManager(), "example dialog");
     }
 
-    //public void createDasherInProgressItemsList(){
-        //inProgressItems = new ArrayList<>();
-       // inProgressItems.add(new DasherInProgressItem(R.drawable.ic_timer_black_24dp, "Line 1", "Line 2"));
-        //inProgressItems.add(new DasherInProgressItem(R.drawable.ic_directions_run_black_24dp, "Line 3", "Line 4"));
-    //}
-
     public void buildDasherInProgressRecyclerView(View v){
         mRecyclerView = v.findViewById(R.id.recyclerViewDasher);
         mRecyclerView.setHasFixedSize(true);
@@ -132,7 +107,7 @@ public class DasherHomeFragment extends Fragment implements DasherFirestoreInter
     @Override
     public void sendJobRequest(final JobRequest jobRequest) {
         this.jobRequest = jobRequest;
-        Toast.makeText(getActivity(),jobRequest.customerInstructions, Toast.LENGTH_SHORT).show();
+        //Toast.makeText(getActivity(),jobRequest.customerInstructions, Toast.LENGTH_SHORT).show();
         //add alert box
         AlertDialog.Builder jobFound = new AlertDialog.Builder(getContext());
         jobFound.setTitle("Job Found! Would you like to accept it?");
@@ -179,16 +154,13 @@ public class DasherHomeFragment extends Fragment implements DasherFirestoreInter
     @Override
     public void sendPendingJobsExist(Boolean pendingJobsExist) {
         if(pendingJobsExist){ //oldest job exists
-            Toast.makeText(getActivity(), "Jobs Exist", Toast.LENGTH_SHORT).show();
-            //JobRequest jobRequest = jobRequestFireStore.getOldestJob(dasher);
-            //Toast.makeText(getActivity(), jobRequest.customerInstructions, Toast.LENGTH_SHORT).show();
             FirebaseFirestore db = FirebaseFirestore.getInstance();
             db.collection("dorms").document(dasher.dorm).collection("jobsPendingAssignment").orderBy("REQUEST_TIMESTAMP", Query.Direction.ASCENDING).limit(1).get() //gets oldest job
                     .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             for (QueryDocumentSnapshot documentSnapshot : queryDocumentSnapshots){
-                                Toast.makeText(getActivity(), documentSnapshot.getId(), Toast.LENGTH_SHORT).show();
+                                //Toast.makeText(getActivity(), documentSnapshot.getId(), Toast.LENGTH_SHORT).show();
                                 jobRequestFireStore.getPendingJob(documentSnapshot.getId(), jobRequest, dasher);
                             }
                         }

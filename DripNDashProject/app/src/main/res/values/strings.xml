@@ -62,6 +62,12 @@
     <string name="customername">customerName</string>
     <string name="check_if_there_are_pending_jobs_in_llvingston_apartments">Check if there are pending Jobs in LLvingston Apartments</string>
     <string name="check_if_there_are_pending_jobs_in_livingston">Check if there are pending jobs in Livingston</string>
+    <string name="CustomerName" />
+    <string name="your_name">Your name</string>
+    <string name="email">Email</string>
+    <string name="rating">Rating</string>
+    <string name="edit">edit</string>
+    <string name="save">save</string>
 
 
     >>>>>>> 4a3159a3be4933864d824ddba5523108e6d12da1
