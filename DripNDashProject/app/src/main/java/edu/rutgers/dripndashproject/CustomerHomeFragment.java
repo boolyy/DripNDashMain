@@ -59,6 +59,7 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
         CustomerFirestore customerFirestore = new CustomerFirestore(); //initialize interface
         customerFirestore.delegate = this;
         customerFirestore.getCustomer(user.getUid());
+
         requestJobButton = v.findViewById(R.id.buttonCustomerRequest); //assign requestJobButton to proper button id in layout
 
         requestJobButton.setOnClickListener(new View.OnClickListener(){ //initialize listener for request job button
@@ -127,7 +128,7 @@ public class CustomerHomeFragment extends Fragment implements CustomerRequestDia
     @Override
     public void sendCustomer(Customer customer) {
         this.customer = customer;
-        //Toast.makeText(getActivity(), customer.lastName, Toast.LENGTH_SHORT).show(); // just a test to make sure that getCustomer is working correctly
+        Toast.makeText(getActivity(), customer.lastName, Toast.LENGTH_SHORT).show(); // just a test to make sure that getCustomer is working correctly
     }
 
 
